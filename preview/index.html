@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b0f15">
+<title>BYTE RUSH — ArchOS Arcade</title>
+<style>
+  :root{color-scheme:dark;--bg:#0b0f15;--panel:#101720;--panel2:#141c26;--line:#26313d;--muted:#8293a6;--text:#e9eff6;--accent:#86edbb;--accentDark:#152c24;--danger:#ff8585;--gold:#ffd083;--mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;--sans:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+  *{box-sizing:border-box}html{min-height:100%;background:var(--bg)}body{margin:0;font-family:var(--sans);color:var(--text);min-height:100vh;background:radial-gradient(ellipse 50% 40% at 50% -15%,#213229 0,transparent 100%),var(--bg)}
+  button{font:inherit;cursor:pointer}button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}button:disabled{cursor:not-allowed}
+  .app{max-width:1220px;margin:auto;padding:28px 28px 55px}.topbar{height:66px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);gap:18px}
+  .brand{display:flex;align-items:center;gap:12px}.brand-mark{display:grid;place-items:center;width:37px;height:37px;border-radius:10px;background:var(--accent);color:#0b1711;font:bold 17px var(--mono);box-shadow:0 0 30px #86edbb18}.brand-word{font-weight:800;letter-spacing:.055em;font-size:13px}.brand-word span{display:block;margin-top:3px;color:var(--muted);font:10px var(--mono);letter-spacing:.08em;font-weight:400}
+  .top-right{display:flex;align-items:center;gap:15px}.online{color:var(--accent);font:11px var(--mono);white-space:nowrap}.online:before{content:"";display:inline-block;width:7px;height:7px;margin-right:8px;background:var(--accent);border-radius:50%;box-shadow:0 0 12px #86edbb88}.iconbtn{border:1px solid var(--line);color:#bac7d4;background:#151c26;padding:9px 12px;border-radius:8px;font:11px var(--mono);transition:background .2s,border-color .2s}.iconbtn:hover{background:#1c2730;border-color:#4f655b}
+  .masthead{display:flex;justify-content:space-between;align-items:end;gap:12px;padding:42px 0 30px}.eyebrow{font:11px var(--mono);letter-spacing:.15em;color:var(--accent)}h1{margin:11px 0 9px;font-weight:800;line-height:1;letter-spacing:-.065em;font-size:clamp(43px,7vw,71px)}.lead{font-size:14px;color:var(--muted);margin:0;line-height:1.65}.season{font:11px var(--mono);letter-spacing:.08em;color:#8f9eaa;padding-bottom:6px;text-align:right}
+  .layout{display:grid;grid-template-columns:242px minmax(0,1fr);gap:20px;align-items:start}.sidebar{display:grid;gap:16px}.tile,.game{border:1px solid var(--line);background:var(--panel);border-radius:14px;overflow:hidden;box-shadow:0 12px 35px #0002}.tile{padding:22px}.section-label{font:11px var(--mono);color:var(--muted);letter-spacing:.11em}.stat-number{font:bold 43px var(--mono);letter-spacing:-.07em;margin:12px 0 1px}.stat-number.accent{color:var(--accent)}.tiny{font-size:11px;color:var(--muted);line-height:1.65}.divider{height:1px;background:var(--line);margin:20px 0}.numbers{display:flex;justify-content:space-between;gap:10px}.numbers strong{display:block;font:18px var(--mono);margin:10px 0 4px}.number-caption{font:10px var(--mono);color:var(--muted)}.hearts{color:var(--danger);font-size:23px;letter-spacing:6px;margin-top:12px}.shortcut{display:flex;align-items:center;justify-content:space-between;margin:14px 0;font-size:12px;color:#a6b3c2;gap:8px}.shortcut:last-child{margin-bottom:0}kbd{font:11px var(--mono);border-radius:5px;background:#1c2731;border:1px solid #354455;color:#b5c3d0;min-width:24px;text-align:center;padding:4px 6px}
+  .game-head{display:flex;justify-content:space-between;align-items:center;padding:22px 28px;border-bottom:1px solid var(--line);gap:12px}.game-kicker{font:11px var(--mono);color:var(--accent);letter-spacing:.07em}.mode-toggle{display:flex;gap:3px;border:1px solid var(--line);padding:3px;border-radius:8px;background:#0a1119}.mode{border:none;color:#8796a6;background:transparent;border-radius:5px;padding:9px 13px;font:11px var(--mono);transition:all .2s}.mode.active{color:#0c1a12;background:var(--accent);font-weight:bold}.mode:not(.active):hover{color:#e8eff5;background:#1a2631}
+  .progress-wrap{padding:28px 32px 0}.progress-top{display:flex;align-items:center;justify-content:space-between;font:11px var(--mono);color:#a8b6c4;margin-bottom:12px}.progress{height:5px;border-radius:10px;background:#26323a;overflow:hidden}.fill{height:100%;background:var(--accent);border-radius:10px;transition:width .4s cubic-bezier(.2,.8,.2,1);width:0}
+  .challenge{padding:46px 32px 34px;text-align:center;min-height:211px}.challenge-eyebrow{font:11px var(--mono);color:var(--muted);letter-spacing:.14em}.equation{margin:18px 0 0;font:clamp(31px,5vw,53px)/1.3 var(--mono);font-weight:bold;letter-spacing:-.045em;overflow-wrap:anywhere}.equation.enter{animation:showup .32s ease-out}.question-helper{margin-top:15px;font:12px var(--mono);color:#677d8b}
+  .answers{padding:0 32px 28px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.choice{border:1px solid #34424f;background:var(--panel2);border-radius:10px;min-height:93px;display:flex;align-items:center;gap:22px;padding:16px 18px;text-align:left;color:#e8eff5;transition:transform .13s,border-color .16s,background .16s;position:relative;overflow:hidden}.choice:not(:disabled):hover{background:#1d2b34;border-color:#86edbb99;transform:translateY(-2px)}.choice-key{border:1px solid #3b4d5b;color:#8fa4b0;border-radius:6px;width:30px;height:30px;display:grid;place-items:center;font:12px var(--mono);flex-shrink:0}.choice-value{font:25px var(--mono);letter-spacing:-.045em;font-weight:700}.choice.correct{border-color:var(--accent);background:var(--accentDark);color:var(--accent)}.choice.wrong{border-color:var(--danger);background:#351d26;color:var(--danger)}.choice.correct .choice-key{border-color:var(--accent)}.choice.wrong .choice-key{border-color:var(--danger)}.choice:disabled{opacity:.64}.choice.correct:disabled,.choice.wrong:disabled{opacity:1}
+  .feedback{padding:0 32px 20px;min-height:42px;display:flex;align-items:center;justify-content:space-between;font:12px var(--mono);color:var(--muted);gap:12px}.feedback.good{color:var(--accent)}.feedback.bad{color:var(--danger)}
+  .game-bottom{border-top:1px solid var(--line);padding:18px 28px;display:flex;align-items:center;justify-content:space-between;gap:14px}.footer-note{font:11px var(--mono);color:#728394}.restart{border:1px solid #345344;border-radius:7px;background:#182d23;color:var(--accent);padding:10px 14px;font:bold 11px var(--mono);transition:.2s}.restart:hover{background:#254235}
+  .history{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px}.dot{width:16px;height:16px;border:1px solid #3b4654;border-radius:4px}.dot.yes{background:var(--accent);border-color:var(--accent)}.dot.no{background:var(--danger);border-color:var(--danger)}.dot.current{border-color:#c2d2de;box-shadow:0 0 0 2px #b3c2d022}
+  .end{margin:0 32px 30px;padding:34px;border:1px solid #3b604b;background:#14251d;border-radius:12px;text-align:center;animation:showup .3s ease}.end h2{font-size:29px;letter-spacing:-.05em;margin:7px 0}.end p{color:#a4bcae;line-height:1.6;font-size:13px}.end strong{font:36px var(--mono);color:var(--accent)}.end button{border:0;background:var(--accent);color:#0c1912;padding:13px 20px;border-radius:8px;font-weight:800;margin-top:18px}
+  .bottom-label{color:#596c7b;font:10px var(--mono);margin-top:26px;letter-spacing:.06em;text-align:center}.sr-only{position:absolute;clip:rect(0,0,0,0);width:1px;height:1px;overflow:hidden}
+  @keyframes showup{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+  @media(max-width:850px){.layout{grid-template-columns:1fr}.sidebar{display:grid;grid-template-columns:1fr 1fr}.side-help{display:none}.masthead{padding-top:30px}.app{padding:16px 16px 34px}}
+  @media(max-width:560px){.app{padding:12px}.topbar{height:57px}.online{display:none}.masthead{align-items:start;padding:29px 0 22px}.season{display:none}.layout{gap:12px}.sidebar{grid-template-columns:1fr 1fr;gap:10px}.tile{padding:15px}.tile .stat-number{font-size:30px}.section-label{font-size:9px}.numbers{gap:3px}.numbers strong{font-size:15px}.game-head,.game-bottom{padding:16px}.game-head{align-items:start;flex-direction:column}.progress-wrap{padding:22px 17px 0}.challenge{min-height:157px;padding:28px 15px 25px}.answers{padding:0 14px 16px;gap:8px}.choice{min-height:78px;gap:12px;padding:12px}.choice-value{font-size:23px}.choice-key{width:25px;height:25px}.feedback{padding:0 16px 12px;font-size:11px}.end{margin:0 14px 20px;padding:25px 12px}.shortcut{font-size:11px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark">B_</div><div class="brand-word">BYTE RUSH<span>ARCHOS / ARCADE</span></div></div>
+    <div class="top-right"><span class="online">SYSTEM ONLINE</span><button class="iconbtn" id="sound" type="button" aria-pressed="false">SOUND: OFF</button></div>
+  </header>
+  <div class="masthead"><div><div class="eyebrow">// LOGIC TRAINING SYSTEM</div><h1>Think fast<span style="color:var(--accent)">.</span></h1><p class="lead">Fifteen challenges. Three lives. One high score.</p></div><div class="season">V.01 / SINGLE PLAYER<br>OFFLINE READY</div></div>
+  <main class="layout">
+    <aside class="sidebar">
+      <section class="tile"><div class="section-label">CURRENT SESSION</div><div class="stat-number accent" id="score">0000</div><div class="tiny">Total points earned</div><div class="divider"></div><div class="numbers"><div><div class="number-caption">BEST RUN</div><strong id="best">0000</strong></div><div><div class="number-caption">COMBO</div><strong id="combo">x0</strong></div></div><div class="divider"></div><div class="section-label">REMAINING LIVES</div><div class="hearts" id="hearts" aria-label="3 lives">♥ ♥ ♥</div></section>
+      <section class="tile"><div class="section-label">RUN TRACKER</div><p class="tiny">A correct answer fills a slot. Wrong answers cost one life.</p><div class="history" id="history" aria-label="Round history"></div></section>
+      <section class="tile side-help"><div class="section-label">KEYBOARD SHORTCUTS</div><div class="shortcut"><span>Choose answer</span><span><kbd>1</kbd>–<kbd>4</kbd></span></div><div class="shortcut"><span>Restart run</span><kbd>R</kbd></div><div class="shortcut"><span>Switch mode</span><kbd>M</kbd></div><div class="divider"></div><div class="tiny">No account, downloads or network needed. Everything runs directly in this browser.</div></section>
+    </aside>
+    <section class="game" aria-label="Byte Rush game">
+      <header class="game-head"><div class="game-kicker">● CHALLENGE ENGINE / <span id="mode-title">ARITHMETIC</span></div><div class="mode-toggle" role="group" aria-label="Game mode"><button class="mode active" type="button" data-mode="math" aria-pressed="true">MATH</button><button class="mode" type="button" data-mode="sequences" aria-pressed="false">SEQUENCES</button></div></header>
+      <div class="progress-wrap"><div class="progress-top"><span id="round-label">ROUND 01 / 15</span><span id="progress-label">0% COMPLETE</span></div><div class="progress"><div class="fill" id="fill"></div></div></div>
+      <div class="challenge"><div class="challenge-eyebrow" id="prompt-label">SOLVE THE EQUATION</div><div class="equation" id="equation">—</div><div class="question-helper">Select the correct answer below.</div></div>
+      <div class="answers" id="answers"></div>
+      <div class="feedback" id="feedback" role="status" aria-live="polite"><span>YOUR TURN — PICK AN ANSWER</span><span>+100 BASE XP</span></div>
+      <div id="endMount"></div>
+      <div class="game-bottom"><span class="footer-note">PROGRESS SAVES BEST SCORE LOCALLY</span><button class="restart" id="restart" type="button">↻ NEW RUN</button></div>
+    </section>
+  </main>
+  <div class="bottom-label">BYTE RUSH — AN ORIGINAL ARCADE APP FOR ARCHOS</div>
+</div>
+<script>
+'use strict';
+(() => {
+  const TOTAL = 15;
+  const $ = id => document.getElementById(id);
+  const safeLoad = () => {try {return Math.max(0,Number(localStorage.getItem('byte-rush-best-v1')) || 0)}catch{return 0}};
+  const safeStore = value => {try{localStorage.setItem('byte-rush-best-v1',String(value))}catch{}};
+  let audioOn = false, audioContext;
+  const tone = (freq, duration, type='sine') => {if(!audioOn)return;try{audioContext ||= new (window.AudioContext||window.webkitAudioContext)();const o=audioContext.createOscillator(),v=audioContext.createGain();o.type=type;o.frequency.value=freq;v.gain.setValueAtTime(.05,audioContext.currentTime);v.gain.exponentialRampToValueAtTime(.001,audioContext.currentTime+duration);o.connect(v);v.connect(audioContext.destination);o.start();o.stop(audioContext.currentTime+duration)}catch{}};
+  const rand = n => Math.floor(Math.random()*n)+1;
+  const state={round:1,score:0,best:safeLoad(),combo:0,lives:3,mode:'math',answer:null,correctIndex:0,options:[],question:'',finished:false,locked:false,history:[],timer:null};
+  function createQuestion(){
+    const a=rand(8)+state.round,b=rand(7)+1;
+    let ans,q;
+    if(state.mode==='sequences'){
+      const step=rand(5)+1;ans=a+step*3;q=`${a}, ${a+step}, ${a+step*2}, ?`;
+    }else{
+      const kind=(state.round-1)%3;
+      if(kind===0){ans=a+b;q=`${a} + ${b} = ?`}
+      else if(kind===1){ans=a*b;q=`${a} × ${b} = ?`}
+      else{ans=a;q=`${a+b} − ${b} = ?`}
+    }
+    const distractors=[ans+1,ans-2<0?ans+2:ans-2,ans+4];
+    const correctIndex=rand(4)-1;
+    const options=distractors.slice();options.splice(correctIndex,0,ans);
+    state.answer=ans;state.options=options;state.correctIndex=correctIndex;state.question=q;
+  }
+  const pad = value => String(value).padStart(4,'0');
+  function render(){
+    $('score').textContent=pad(state.score);$('best').textContent=pad(state.best);$('combo').textContent='x'+state.combo;
+    $('hearts').textContent=Array.from({length:3},(_,i)=>i<state.lives?'♥':'♡').join(' ');$('hearts').setAttribute('aria-label',state.lives+' lives');
+    $('round-label').textContent=`ROUND ${String(state.round).padStart(2,'0')} / 15`;
+    $('progress-label').textContent=Math.round(state.history.length/TOTAL*100)+'% COMPLETE';
+    $('fill').style.width=state.history.length/TOTAL*100+'%';
+    $('mode-title').textContent=state.mode==='math'?'ARITHMETIC':'SEQUENCES';
+    $('prompt-label').textContent=state.mode==='math'?'SOLVE THE EQUATION':'COMPLETE THE PATTERN';
+    $('equation').textContent=state.question;
+    $('equation').classList.remove('enter');void $('equation').offsetWidth;$('equation').classList.add('enter');
+    document.querySelectorAll('[data-mode]').forEach(btn=>{const on=btn.dataset.mode===state.mode;btn.classList.toggle('active',on);btn.setAttribute('aria-pressed',on)});
+    $('answers').replaceChildren();
+    state.options.forEach((value,i)=>{
+      const b=document.createElement('button');b.className='choice';b.type='button';b.dataset.choice=String(i);b.disabled=state.finished||state.locked;
+      b.innerHTML=`<span class="choice-key">${i+1}</span><span class="choice-value"></span>`;
+      b.querySelector('.choice-value').textContent=String(value);b.setAttribute('aria-label',`Option ${i+1}: ${value}`);
+      b.addEventListener('click',()=>choose(i));$('answers').appendChild(b);
+    });
+    $('history').replaceChildren();
+    for(let i=0;i<TOTAL;i++){
+      const e=document.createElement('span');e.className='dot';
+      if(i<state.history.length)e.classList.add(state.history[i]?'yes':'no');else if(i===state.history.length&&!state.finished)e.classList.add('current');
+      e.title=`Round ${i+1}: ${i<state.history.length?(state.history[i]?'correct':'incorrect'):'unplayed'}`;$('history').appendChild(e);
+    }
+    if(!state.finished)$('endMount').replaceChildren();
+  }
+  function feedback(message,good){const el=$('feedback');el.className='feedback'+(good===true?' good':good===false?' bad':'');el.replaceChildren();const s=document.createElement('span');s.textContent=message;const x=document.createElement('span');x.textContent=state.finished?'RUN ENDED':`+${100+(state.combo+1)*20} POSSIBLE`;el.append(s,x)}
+  function choose(index){
+    if(state.finished||state.locked)return;
+    const isCorrect=index===state.correctIndex;
+    state.history.push(isCorrect);
+    if(isCorrect){state.combo++;state.score+=100+20*state.combo;tone(700,.14);setTimeout(()=>tone(900,.1),90)}
+    else{state.combo=0;state.lives--;tone(220,.25,'triangle')}
+    if(state.score>state.best){state.best=state.score;safeStore(state.best)}
+    state.locked=true;
+    document.querySelectorAll('.choice').forEach((button,i)=>{button.disabled=true;if(i===state.correctIndex)button.classList.add('correct');else if(i===index)button.classList.add('wrong')});
+    feedback(isCorrect?`✓ CORRECT  /  +${100+20*state.combo} PTS`:`✗ NOT QUITE  /  ANSWER: ${state.answer}`,isCorrect);
+    $('score').textContent=pad(state.score);$('best').textContent=pad(state.best);$('combo').textContent='x'+state.combo;$('hearts').textContent=Array.from({length:3},(_,i)=>i<state.lives?'♥':'♡').join(' ');
+    window.clearTimeout(state.timer);state.timer=window.setTimeout(()=>{
+      if(state.lives<=0||state.round===TOTAL){finish()}else{state.round++;state.locked=false;createQuestion();render();feedback('YOUR TURN — PICK AN ANSWER',null)}
+    },760);
+  }
+  function finish(){
+    state.finished=true;state.locked=false;render();feedback(state.lives===0?'RUN ENDED  /  OUT OF LIVES':'RUN COMPLETE  /  ALL 15 CHALLENGES',state.lives>0);
+    const end=document.createElement('section');end.className='end';
+    const heading=document.createElement('h2');heading.textContent=state.lives>0?'Run completed.':'Run ended.';
+    const subtitle=document.createElement('p');subtitle.textContent=`${state.history.filter(Boolean).length} correct out of ${state.history.length} played. ${state.score===state.best&&state.score>0?'That matches your best score.':'Try again to beat your best.'}`;
+    const top=document.createElement('div');top.className='section-label';top.textContent='FINAL SCORE';
+    const value=document.createElement('strong');value.textContent=pad(state.score);
+    const btn=document.createElement('button');btn.type='button';btn.textContent='PLAY AGAIN →';btn.addEventListener('click',()=>reset());
+    end.append(top,heading,value,subtitle,btn);$('endMount').replaceChildren(end);
+  }
+  function reset(mode=state.mode){
+    window.clearTimeout(state.timer);Object.assign(state,{round:1,score:0,combo:0,lives:3,mode,answer:null,correctIndex:0,options:[],question:'',finished:false,locked:false,history:[],timer:null});
+    createQuestion();render();feedback('YOUR TURN — PICK AN ANSWER',null);
+  }
+  document.querySelectorAll('[data-mode]').forEach(btn=>btn.addEventListener('click',()=>{if(btn.dataset.mode!==state.mode)reset(btn.dataset.mode)}));
+  $('restart').addEventListener('click',()=>reset());
+  $('sound').addEventListener('click',()=>{audioOn=!audioOn;$('sound').textContent='SOUND: '+(audioOn?'ON':'OFF');$('sound').setAttribute('aria-pressed',String(audioOn));if(audioOn)tone(560,.12)});
+  window.addEventListener('keydown',ev=>{if(ev.altKey||ev.metaKey||ev.ctrlKey||ev.repeat)return;const target=ev.target;if(target&&(['INPUT','TEXTAREA','SELECT'].includes(target.tagName)))return;if('1234'.includes(ev.key)&&ev.key.length===1){choose(Number(ev.key)-1)}else if(ev.key.toLowerCase()==='r'){reset()}else if(ev.key.toLowerCase()==='m'){reset(state.mode==='math'?'sequences':'math')}});
+  reset();
+  window.byteRushTestApi={getState:()=>({...state,history:state.history.slice(),options:state.options.slice()}),choose,reset};
+})();
+</script>
+</body>
+</html>

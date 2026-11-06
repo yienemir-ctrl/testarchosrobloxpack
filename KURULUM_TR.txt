@@ -1,0 +1,31 @@
+BYTE RUSH / ARCHOS - HIZLI KURULUM
+=================================
+
+1) ZIP dosyasini tamamen bir klasore cikart.
+2) Git for Windows ve Node.js LTS yuklu olmali.
+3) Klasorun icinde DEPLOY.bat dosyasina cift tikla.
+
+CMD ile yapmak istersen:
+  - Klasoru Dosya Gezgini'nde ac.
+  - Adres cubuguna cmd yaz ve Enter'a bas.
+  - DEPLOY.bat yaz ve Enter'a bas.
+
+Script otomatik olarak:
+  * git init yapar (gerekiyorsa)
+  * origin = https://github.com/yienemir-ctrl/testarchosrobloxpack.git ayarlar
+  * degisiklikleri commit eder ve main'e push yapar
+  * npx/vercel ile web oyununu production'a deploy etmeyi dener
+
+GitHub veya Vercel senden tarayicida oturum acmani isteyebilir.
+Ilk kez Vercel projesi olusuyorsa yeni Byte Rush projesi kullan.
+Mevcut site-five-drab-14.vercel.app sitesi degistirilmez.
+
+ROBLOX ARCHOS UYGULAMASI:
+  * ArchOS Code'u ac, yeni 'byte-rush' projesi olustur.
+  * main.arch dosyasini editorune yapistir.
+  * Build komutuyla .archapp olustur.
+  * .archapp dogrudan Windows BAT ile Roblox'a kurulmaz.
+
+LOCAL TEST:
+  PLAY_WEB.bat = tarayicida oyunu acar.
+  TEST.bat = Node smoke test calistirir.

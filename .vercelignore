@@ -1,0 +1,9 @@
+.git
+.gitignore
+.vercel
+*.bat
+main.arch
+preview/
+tests/
+README.md
+LICENSE
